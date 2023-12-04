@@ -1,0 +1,35 @@
+from PIL import Image
+import pytesseract
+
+image_path='kcpe.jpg'
+def extract_upper(image_path):
+    # Open the image file
+    image = Image.open(image_path)
+
+    # Get the dimensions of the image
+    width, height = image.size
+
+    # Crop the upper half of the image
+    upper_half = image.crop((0, 0, width, height // 2))
+
+    # Perform OCR (Optical Character Recognition) to extract text from the image
+    extracted_text = pytesseract.image_to_string(upper_half)
+
+    return extracted_text
+
+def search_primary(text):
+    # Check if the word 'SECONDARY' is present in the text
+    return 'PRIMARY' in text.upper()
+
+
+
+# Extract text from the upper half of the image
+extracted_text = extract_upper(image_path)
+
+# Search for the word 'SECONDARY' in the extracted text
+found_primary = search_primary(extracted_text)
+
+if found_primary:
+    print("Valid")
+else:
+    print("Invalid")
